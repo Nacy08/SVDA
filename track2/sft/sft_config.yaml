@@ -1,0 +1,36 @@
+model_name_or_path: /root/autodl-tmp/models/LLM-Research/Meta-Llama-3.1-8B-Instruct
+train_file: /root/baseline_Qlora/Data/train.jsonl
+eval_file: /root/baseline_Qlora/Data/dev.jsonl
+output_dir: /root/autodl-tmp/track2_qlora_sft_ckpt
+final_adapter_dir: /root/autodl-tmp/final_adapter
+
+num_train_epochs: 3
+max_seq_length: 512
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-4
+warmup_ratio: 0.03
+weight_decay: 0.01
+save_total_limit: 8
+logging_steps: 10
+eval_ratio_per_epoch: 0.5
+
+bf16: true
+gradient_checkpointing: true
+load_in_4bit: true
+bnb_4bit_quant_type: nf4
+bnb_4bit_compute_dtype: bfloat16
+bnb_4bit_use_double_quant: true
+
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj

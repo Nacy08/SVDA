@@ -1,0 +1,63 @@
+project_root: /root/Plan_Qlora
+
+plan_model: gpt-5-mini
+rerank_model: gpt-5.1
+judge_model: deepseek-v4-pro
+judge_api_base: https://api.deepseek.com
+base_model: /root/autodl-tmp/models/LLM-Research/Meta-Llama-3.1-8B-Instruct
+
+train_raw: /root/baseline_Qlora/Data/train.jsonl
+dev_raw: /root/baseline_Qlora/Data/dev.jsonl
+value_definitions: /root/Plan_Qlora/config/value_definitions.json
+
+train_plan: /root/Plan_Qlora/data/plan/train_plan_gpt5mini.jsonl
+dev_plan: /root/Plan_Qlora/data/plan/dev_plan_gpt5mini.jsonl
+train_sft: /root/Plan_Qlora/data/sft/train_plan_sft.jsonl
+dev_sft: /root/Plan_Qlora/data/sft/dev_plan_sft.jsonl
+inference_dir: /root/Plan_Qlora/data/inference
+output_dir: /root/Plan_Qlora/outputs/plan_sft
+final_adapter_dir: /root/Plan_Qlora/outputs/plan_sft/final_adapter
+results_dir: /root/Plan_Qlora/outputs/results
+log_dir: /root/Plan_Qlora/logs
+
+plan_prompt_version: plan_v1
+request_timeout: 120
+max_retries: 3
+request_interval: 0.0
+
+load_in_4bit: true
+bnb_4bit_quant_type: nf4
+bnb_4bit_compute_dtype: bfloat16
+bnb_4bit_use_double_quant: true
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+
+num_train_epochs: 3
+learning_rate: 1.0e-4
+warmup_ratio: 0.03
+weight_decay: 0.01
+lr_scheduler_type: cosine
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 8
+max_seq_length: 1024
+bf16: true
+gradient_checkpointing: true
+logging_steps: 20
+save_steps: 500
+eval_steps: 500
+save_total_limit: 8
+
+num_candidates: 5
+generation_temperature: 0.7
+top_p: 0.9
+max_new_tokens: 160
