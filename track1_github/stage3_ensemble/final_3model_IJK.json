@@ -1,0 +1,17 @@
+[
+  {
+    "label": "expI_Run2_seed47",
+    "path": "/root/expI_final/checkpoints/expI_Run2_seed47_best.pt",
+    "weight": 1.0
+  },
+  {
+    "label": "expJ_seed47_adj2",
+    "path": "/root/expI_final/checkpoints/expJ_seed47_best.pt",
+    "weight": 1.0
+  },
+  {
+    "label": "expK_seed13_adj1",
+    "path": "/root/expI_final/checkpoints/expK_seed13_best.pt",
+    "weight": 1.0
+  }
+]

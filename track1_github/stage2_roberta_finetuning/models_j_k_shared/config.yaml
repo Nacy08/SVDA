@@ -1,0 +1,96 @@
+experiment:
+  name: expJ
+  task_name: svda_track1_focal_sibling_balanced
+  output_root: /root/autodl-tmp/Task1_baseline1/expJ/outputs
+
+model:
+  pretrained_model_name_or_path: /root/autodl-tmp/FacebookAI/roberta-large
+  max_length: 256
+  dropout: 0.1
+  hidden_dim: 512
+  num_labels: 19
+
+data:
+  train_path: /root/Task1_baseline1/data/svda/train.jsonl
+  dev_path: /root/Task1_baseline1/data/svda/dev.jsonl
+  text_field: Consistent Value Response
+  label_field: Value
+
+train:
+  batch_size: 16
+  learning_rate: 2.0e-5
+  num_epochs: 10
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  early_stopping_patience: 3
+  num_workers: 0
+  epochs_target_size: 3520    # samples per WeightedRandomSampler "epoch"
+
+eval:
+  primary_metric: macro_f1
+
+runtime:
+  device: auto
+  save_confusion_matrix_png: false
+
+regularization:
+  r_drop_lambda: 1.0
+  fgm_epsilon: 1.0
+  ema_decay: 0.999
+
+focal:
+  gamma: 2.0
+
+sampling:
+  strategy: weighted
+  class_balance_power: 0.5     # weight ∝ 1/sqrt(class_count)
+
+sibling:
+  sibling_margin: 1.5
+  sibling_groups:
+    # Same-family pairs (Schwartz core_groups)
+    - [Self-direction–thought, Self-direction–action]
+    - [Power–dominance, Power–resources]
+    - [Security–personal, Security–societal]
+    - [Benevolence–caring, Benevolence–dependability]
+    - [Universalism–concern, Universalism–nature, Universalism–tolerance]
+    - [Conformity–rules, Conformity–interpersonal]
+    # Cross-family confusable pairs observed empirically on dev errors:
+    - [Benevolence–caring, Conformity–interpersonal]
+    - [Benevolence–dependability, Conformity–interpersonal]
+
+hybrid_ranking:
+  enabled: true
+  candidate_mode: adjacent_2
+  lambda_hybrid: 0.1
+  lambda_global: 0.05
+  margin: 1.0
+  top_k_hybrid: 1
+  top_k_global: 1
+  start_epoch: 2
+  circular_order:
+    - Self-direction–thought
+    - Self-direction–action
+    - Stimulation
+    - Hedonism
+    - Achievement
+    - Power–dominance
+    - Power–resources
+    - Face
+    - Security–personal
+    - Security–societal
+    - Tradition
+    - Conformity–rules
+    - Conformity–interpersonal
+    - Humility
+    - Benevolence–caring
+    - Benevolence–dependability
+    - Universalism–concern
+    - Universalism–nature
+    - Universalism–tolerance
+  core_groups:
+    - [Self-direction–thought, Self-direction–action]
+    - [Power–dominance, Power–resources]
+    - [Security–personal, Security–societal]
+    - [Benevolence–caring, Benevolence–dependability]
+    - [Universalism–concern, Universalism–nature, Universalism–tolerance]
